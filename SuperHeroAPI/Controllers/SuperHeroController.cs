@@ -7,14 +7,18 @@ namespace SuperHeroAPI.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-        private static List<SuperHero> heroes = new List<SuperHero> { new SuperHero
-        {Id = 1, Name = "Batman", FirstName = "Bruce",LastName = "Wayne", Place = "Gotham City" }
-            };
-        
+    
+        private readonly DataContext _context;
+        public SuperHeroController(DataContext context)
+        {
+            _context = context;
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> Get()
         {
-            return Ok(heroes);
+            return Ok(await _context.SuperHeroes.ToListAsync());
         }
 
         [HttpGet("{id}")]
