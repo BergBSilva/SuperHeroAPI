@@ -58,11 +58,12 @@ namespace SuperHeroAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<SuperHero>>> DeleteHero(int id)
         {
-            var hero = heroes.Find(h => h.Id == id);
-            if (hero == null) return BadRequest("Hero not found");
-            
-            heroes.Remove(hero);
-            return Ok(heroes);
+            var dbhero = await _context.SuperHeroes.FindAsync(id);
+            if (dbhero == null) return BadRequest("Hero not found");
+
+            _context.SuperHeroes.Remove(dbhero);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.SuperHeroes.ToListAsync());
         }
     }
 }
